@@ -1,0 +1,58 @@
+name: Formatting and linting
+
+on:
+  pull_request:
+
+env:
+  RUST_PATH: src-tauri
+  CARGO_PROFILE_DEV_DEBUG: 0
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }} # label the workflow runs that belong together
+  cancel-in-progress: true # cancel any currently running jobs in the group if a new run is triggered
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust stable and components
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: ${{ env.RUST_PATH }}
+
+      - name: Run formatter (rustfmt)
+        run: cargo fmt --manifest-path ${{ env.RUST_PATH }}/Cargo.toml --all --check
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y webkit2gtk-4.1 libayatana-appindicator3-dev
+
+      - name: Run linter (clippy)
+        run: cargo clippy --manifest-path ${{ env.RUST_PATH }}/Cargo.toml --all-targets --all-features -- -D warnings
+
+  frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "lts/*"
+          cache: "yarn"
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Run formatter (Prettier)
+        run: yarn prettier --check src
+
+      - name: Run linter (ESLint)
+        run: yarn eslint src
