@@ -1,0 +1,48 @@
+name: Formatting and linting
+
+on:
+  pull_request:
+
+# Make sure CI fails on all warnings, including Clippy lints
+env:
+  RUSTFLAGS: "-Dwarnings"
+  RUST_MANIFEST_PATH: src-tauri/Cargo.toml
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust stable and rustfmt
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components:
+            - rustfmt
+            - clippy
+
+      - name: Run formatter (rustfmt)
+        run: cargo fmt --manifest-path $RUST_MANIFEST_PATH --all --check
+
+      - name: Run linter (clippy)
+        run: cargo clippy --manifest-path $RUST_MANIFEST_PATH --all-targets --all-features
+
+  frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "lts/*"
+          cache: "yarn"
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Run formatter (Prettier)
+        run: yarn prettier --check src
+
+      - name: Run linter (ESLint)
+        run: yarn eslint src
