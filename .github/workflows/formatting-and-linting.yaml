@@ -6,7 +6,7 @@ on:
 # Make sure CI fails on all warnings, including Clippy lints
 env:
   RUSTFLAGS: "-Dwarnings"
-  RUST_MANIFEST_PATH: src-tauri/Cargo.toml
+  RUST_PATH: src-tauri
 
 jobs:
   backend:
@@ -14,16 +14,24 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Cache Cargo dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.cargo/registry
+          key: ${{ runner.os }}-cargo-${{ hashFiles('${{ env.RUST_PATH }}/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-
+
       - name: Install Rust stable and rustfmt
         uses: dtolnay/rust-toolchain@stable
         with:
           components: rustfmt, clippy
 
       - name: Run formatter (rustfmt)
-        run: cargo fmt --manifest-path $RUST_MANIFEST_PATH --all --check
+        run: cargo fmt --manifest-path ${{ env.RUST_PATH }}/Cargo.toml --all --check
 
       - name: Run linter (clippy)
-        run: cargo clippy --manifest-path $RUST_MANIFEST_PATH --all-targets --all-features
+        run: cargo clippy --manifest-path ${{ env.RUST_PATH }}/Cargo.toml --all-targets --all-features
 
   frontend:
     runs-on: ubuntu-latest
