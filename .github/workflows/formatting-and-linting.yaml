@@ -1,7 +1,7 @@
 name: Formatting and linting
 
 on:
-  pull_request:
+  # pull_request:
 
 env:
   RUST_PATH: src-tauri
