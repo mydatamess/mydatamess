@@ -5,7 +5,7 @@ on:
 
 env:
   APP_PATH: app
-  APP_BACKEND_PATH: ${{ env.APP_PATH }}/src-tauri
+  APP_BACKEND_FOLDER: src-tauri
   APP_FE_FOLDER: src
   CORE_PATH: core
   CARGO_PROFILE_DEV_DEBUG: 0
@@ -29,13 +29,13 @@ jobs:
         with:
           workspaces:
             - ${{ env.CORE_PATH }}
-            - ${{ env.APP_BACKEND_PATH }}
+            - ${{ env.APP_PATH }}/${{ env.APP_BACKEND_FOLDER }}
 
       - name: Core - Run formatter (rustfmt)
         run: cargo fmt --manifest-path ${{ env.CORE_PATH }}/Cargo.toml --all --check
 
       - name: App - Run formatter (rustfmt)
-        run: cargo fmt --manifest-path ${{ env.APP_BACKEND_PATH }}/Cargo.toml --all --check
+        run: cargo fmt --manifest-path ${{ env.APP_PATH }}/${{ env.APP_BACKEND_FOLDER }}/Cargo.toml --all --check
 
       - name: Install dependencies
         run: |
@@ -46,7 +46,7 @@ jobs:
         run: cargo clippy --manifest-path ${{ env.CORE_PATH }}/Cargo.toml --all-targets --all-features -- -D warnings
 
       - name: App - Run linter (clippy)
-        run: cargo clippy --manifest-path ${{ env.APP_BACKEND_PATH }}/Cargo.toml --all-targets --all-features -- -D warnings
+        run: cargo clippy --manifest-path ${{ env.APP_PATH }}/${{ env.APP_BACKEND_FOLDER }}/Cargo.toml --all-targets --all-features -- -D warnings
 
   frontend:
     runs-on: ubuntu-latest
