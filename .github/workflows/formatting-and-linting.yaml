@@ -53,14 +53,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Move to app folder
+        run: cd ${{ env.APP_PATH }}
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "lts/*"
           cache: "yarn"
-
-      - name: Move to app folder
-        run: cd ${{ env.APP_PATH }}
+          cache-dependency-path: ${{ env.APP_FE_FOLDER }}/yarn.lock
 
       - name: Install dependencies
         run: yarn install --immutable
