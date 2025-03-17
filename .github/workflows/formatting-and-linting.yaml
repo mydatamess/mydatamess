@@ -27,9 +27,9 @@ jobs:
 
       - uses: Swatinem/rust-cache@v2
         with:
-          workspaces:
-            - ${{ env.CORE_PATH }}
-            - ${{ env.APP_PATH }}/${{ env.APP_BACKEND_FOLDER }}
+          workspaces: |
+            ${{ env.CORE_PATH }}
+            ${{ env.APP_PATH }}/${{ env.APP_BACKEND_FOLDER }}
 
       - name: Core - Run formatter (rustfmt)
         run: cargo fmt --manifest-path ${{ env.CORE_PATH }}/Cargo.toml --all --check
