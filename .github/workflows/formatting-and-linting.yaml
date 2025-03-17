@@ -61,6 +61,7 @@ jobs:
         with:
           node-version: "lts/*"
           cache: "yarn"
+          cache-dependency-path: ${{ env.APP_PATH }}/yarn.lock
 
       - name: Install dependencies
         run: yarn install --immutable
