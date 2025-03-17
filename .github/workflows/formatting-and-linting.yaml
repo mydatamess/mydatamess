@@ -50,18 +50,17 @@ jobs:
 
   frontend:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ env.APP_PATH }}
     steps:
       - uses: actions/checkout@v4
-
-      - name: Move to app folder
-        run: cd ${{ env.APP_PATH }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "lts/*"
           cache: "yarn"
-          cache-dependency-path: ${{ env.APP_PATH }}/yarn.lock
 
       - name: Install dependencies
         run: yarn install --immutable
