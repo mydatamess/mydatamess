@@ -1,18 +1,22 @@
-use mydatamess_core::CoreModel;
+mod commands;
+mod state;
 
-// Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-#[tauri::command]
-fn greet(name: &str) -> String {
-    format!("Hello, {}! You've been greeted from Rust!", name)
-}
+use commands as cmds;
+use mydatamess_core::application::services::resource_service::ResourceService;
+use state::AppState;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
-    let model = CoreModel {};
+    let app_state = AppState {
+        resource_port: Box::new(ResourceService::new()),
+    };
 
     tauri::Builder::default()
+        .manage(app_state)
         .plugin(tauri_plugin_opener::init())
-        .invoke_handler(tauri::generate_handler![greet])
+        .invoke_handler(tauri::generate_handler![
+            cmds::resources::__resources_get_resources
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

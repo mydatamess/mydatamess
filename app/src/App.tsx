@@ -1,19 +1,16 @@
 import React, { useState } from "react";
 import reactLogo from "./assets/react.svg";
-import { invoke } from "@tauri-apps/api/core";
 import "./App.css";
+import { useAppContext } from "./context/AppContext";
 
 function App(): React.JSX.Element {
-  const [greetMsg, setGreetMsg] = useState("");
-  const [name, setName] = useState("");
+  const {
+    services: { resourceService },
+  } = useAppContext();
+  const [resources, setResources] = useState<string[]>([]);
 
   async function greet() {
-    // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-    setGreetMsg(
-      await invoke("greet", {
-        name,
-      }),
-    );
+    setResources(await resourceService.getResources());
   }
 
   return (
@@ -33,6 +30,12 @@ function App(): React.JSX.Element {
       </div>
       <p>Click on the Tauri, Vite, and React logos to learn more.</p>
 
+      <ul>
+        {resources.map((resource) => (
+          <li key={resource}>{resource}</li>
+        ))}
+      </ul>
+
       <form
         className="row"
         onSubmit={(e) => {
@@ -40,14 +43,9 @@ function App(): React.JSX.Element {
           greet();
         }}
       >
-        <input
-          id="greet-input"
-          onChange={(e) => setName(e.currentTarget.value)}
-          placeholder="Enter a name..."
-        />
+        <input id="greet-input" placeholder="Enter a name..." />
         <button type="submit">Greet</button>
       </form>
-      <p>{greetMsg}</p>
     </main>
   );
 }
