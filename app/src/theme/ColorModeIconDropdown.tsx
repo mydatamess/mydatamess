@@ -45,6 +45,9 @@ export default function ColorModeIconDropdown(props: IconButtonOwnProps) {
   return (
     <React.Fragment>
       <IconButton
+        title="Theme"
+        aria-label="Theme"
+        aria-labelledby="color-scheme-toggle"
         data-screenshot="toggle-mode"
         onClick={handleClick}
         disableRipple
