@@ -1,13 +1,14 @@
 import * as React from "react";
-import { styled } from "@mui/material/styles";
-import Avatar from "@mui/material/Avatar";
+import { styled, useTheme } from "@mui/material/styles";
 import MuiDrawer, { drawerClasses } from "@mui/material/Drawer";
 import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
+import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
 import MenuContent from "./MenuContent";
-import OptionsMenu from "./OptionsMenu";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 const drawerWidth = 240;
 
@@ -15,19 +16,33 @@ const Drawer = styled(MuiDrawer)({
   width: drawerWidth,
   flexShrink: 0,
   boxSizing: "border-box",
-  mt: 10,
   [`& .${drawerClasses.paper}`]: {
     width: drawerWidth,
     boxSizing: "border-box",
   },
 });
 
-export default function SideMenu(): React.JSX.Element {
+interface SideMenuProps {
+  mobileMenuOpen: boolean;
+  toggleMobileMenu: (open: boolean) => () => void;
+}
+
+export default function SideMenu({
+  mobileMenuOpen,
+  toggleMobileMenu,
+}: SideMenuProps): React.JSX.Element {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+
   return (
     <Drawer
-      variant="permanent"
+      anchor="left"
+      variant={isMobile ? "temporary" : "permanent"}
+      open={isMobile ? mobileMenuOpen : true}
+      onClose={isMobile ? toggleMobileMenu(false) : undefined}
       sx={{
-        display: { xs: "none", md: "block" },
+        display: { xs: "block", md: "block" },
+        zIndex: (theme) => theme.zIndex.drawer + 1,
         [`& .${drawerClasses.paper}`]: {
           backgroundColor: "background.paper",
         },
@@ -41,7 +56,7 @@ export default function SideMenu(): React.JSX.Element {
           justifyContent: "center",
         }}
       >
-        <Typography>
+        <Typography variant="subtitle1">
           my<strong>data</strong>mess
         </Typography>
       </Box>
@@ -66,24 +81,18 @@ export default function SideMenu(): React.JSX.Element {
           borderColor: "divider",
         }}
       >
-        <Avatar
-          sizes="small"
-          alt="John Doe"
-          src="/static/images/avatar/7.jpg"
-          sx={{ width: 36, height: 36 }}
-        />
-        <Box sx={{ mr: "auto" }}>
-          <Typography
-            variant="body2"
-            sx={{ fontWeight: 500, lineHeight: "16px" }}
-          >
-            John Doe
-          </Typography>
-          <Typography variant="caption" sx={{ color: "text.secondary" }}>
-            johndoe@email.com
-          </Typography>
-        </Box>
-        <OptionsMenu />
+        <Button
+          component="label"
+          role={undefined}
+          variant="outlined"
+          tabIndex={-1}
+          startIcon={<SettingsRoundedIcon color="action" />}
+          size="small"
+          color="primary"
+          fullWidth
+        >
+          Settings
+        </Button>
       </Stack>
     </Drawer>
   );

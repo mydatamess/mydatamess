@@ -1,53 +1,56 @@
-import React, { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import "./App.css";
-import { useAppContext } from "./context/AppContext";
+import React from "react";
+import { alpha } from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
+import Box from "@mui/material/Box";
+import Stack from "@mui/material/Stack";
+import AppNavbar from "./components/AppNavbar";
+import Header from "./components/Header";
+import MainGrid from "./components/MainGrid";
+import SideMenu from "./components/SideMenu";
+import AppTheme from "./theme/AppTheme";
 
-function App(): React.JSX.Element {
-  const {
-    services: { resourceService },
-  } = useAppContext();
-  const [resources, setResources] = useState<string[]>([]);
+export default function App(props: {}): React.JSX.Element {
+  const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
 
-  async function greet() {
-    setResources(await resourceService.getResources());
-  }
+  const toggleMobileMenu = (newOpen: boolean) => () => {
+    setMobileMenuOpen(newOpen);
+  };
 
   return (
-    <main className="container">
-      <h1>Welcome to Tauri + React</h1>
-
-      <div className="row">
-        <a href="https://vitejs.dev" target="_blank" rel="noreferrer">
-          <img src="/vite.svg" className="logo vite" alt="Vite logo" />
-        </a>
-        <a href="https://tauri.app" target="_blank" rel="noreferrer">
-          <img src="/tauri.svg" className="logo tauri" alt="Tauri logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank" rel="noreferrer">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <p>Click on the Tauri, Vite, and React logos to learn more.</p>
-
-      <ul>
-        {resources.map((resource) => (
-          <li key={resource}>{resource}</li>
-        ))}
-      </ul>
-
-      <form
-        className="row"
-        onSubmit={(e) => {
-          e.preventDefault();
-          greet();
-        }}
-      >
-        <input id="greet-input" placeholder="Enter a name..." />
-        <button type="submit">Greet</button>
-      </form>
-    </main>
+    <AppTheme {...props}>
+      <CssBaseline enableColorScheme />
+      <Box sx={{ display: "flex" }}>
+        <SideMenu
+          mobileMenuOpen={mobileMenuOpen}
+          toggleMobileMenu={toggleMobileMenu}
+        />
+        <AppNavbar toggleMenu={toggleMobileMenu} />
+        {/* Main content */}
+        <Box
+          component="main"
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          sx={(theme: any) => ({
+            flexGrow: 1,
+            backgroundColor: theme.vars
+              ? `rgba(${theme.vars.palette.background.defaultChannel} / 1)`
+              : alpha(theme.palette.background.default, 1),
+            overflow: "auto",
+          })}
+        >
+          <Stack
+            spacing={2}
+            sx={{
+              alignItems: "center",
+              mx: 3,
+              pb: 5,
+              mt: { xs: 8, md: 0 },
+            }}
+          >
+            <Header />
+            <MainGrid />
+          </Stack>
+        </Box>
+      </Box>
+    </AppTheme>
   );
 }
-
-export default App;
