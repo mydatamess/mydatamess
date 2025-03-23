@@ -9,7 +9,7 @@ import MainGrid from "./components/MainGrid";
 import SideMenu from "./components/SideMenu";
 import AppTheme from "./theme/AppTheme";
 
-export default function App(props: {}): React.JSX.Element {
+export default function App(): React.JSX.Element {
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
 
   const toggleMobileMenu = (newOpen: boolean) => () => {
@@ -17,7 +17,7 @@ export default function App(props: {}): React.JSX.Element {
   };
 
   return (
-    <AppTheme {...props}>
+    <AppTheme>
       <CssBaseline enableColorScheme />
       <Box sx={{ display: "flex" }}>
         <SideMenu
