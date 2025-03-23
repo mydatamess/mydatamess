@@ -17,5 +17,9 @@ export default [
         version: "detect", // automatically detect the React version
       },
     },
+    rules: {
+      "react/jsx-uses-react": "off",
+      "react/react-in-jsx-scope": "off",
+    },
   },
 ];

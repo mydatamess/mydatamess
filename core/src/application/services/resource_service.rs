@@ -16,6 +16,12 @@ impl ResourceService {
     }
 }
 
+impl Default for ResourceService {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl ResourcePort for ResourceService {
     fn get_root_resource(&self) -> Result<RootResource, ResourcePortError> {
         Ok(RootResource {
