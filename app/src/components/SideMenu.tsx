@@ -9,6 +9,7 @@ import Button from "@mui/material/Button";
 import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
 import MenuContent from "./MenuContent";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import { useTranslation } from "react-i18next";
 
 const drawerWidth = 240;
 
@@ -31,6 +32,7 @@ export default function SideMenu({
   mobileMenuOpen,
   toggleMobileMenu,
 }: SideMenuProps): React.JSX.Element {
+  const { t } = useTranslation(["common"]);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
@@ -91,7 +93,7 @@ export default function SideMenu({
           color="primary"
           fullWidth
         >
-          Settings
+          {t("common:menu.settings")}
         </Button>
       </Stack>
     </Drawer>

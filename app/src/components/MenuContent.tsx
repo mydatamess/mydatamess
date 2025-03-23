@@ -6,10 +6,15 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import Stack from "@mui/material/Stack";
 import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
-
-const mainListItems = [{ text: "Home", icon: <HomeRoundedIcon /> }];
+import { useTranslation } from "react-i18next";
 
 export default function MenuContent(): React.JSX.Element {
+  const { t } = useTranslation(["common"]);
+
+  const mainListItems = [
+    { text: t("common:menu.home"), icon: <HomeRoundedIcon /> },
+  ];
+
   return (
     <Stack sx={{ flexGrow: 1, p: 1, justifyContent: "space-between" }}>
       <List dense>
