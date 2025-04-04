@@ -29,7 +29,10 @@ export class TauriResourceService implements ResourceService {
 const RootResourceSchema = z.object({
   id: z.string(),
   displayName: z.string(),
-  description: z.string().optional(),
+  description: z
+    .string()
+    .nullish()
+    .transform((x) => x ?? undefined),
 });
 
 const GetRootResourceErrorSchema = z.discriminatedUnion("type", [

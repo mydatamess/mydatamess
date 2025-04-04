@@ -1,10 +1,12 @@
 import z, { ZodSchema } from "zod";
 import { GenericError, genericError } from "../../common/errors";
 
-const CommandErrorSchema = z.object({
-  type: z.string(),
-  error: z.record(z.any()),
-});
+const CommandErrorSchema = z
+  .object({
+    type: z.string(),
+    error: z.any(),
+  })
+  .passthrough();
 
 export type CommandError = z.infer<typeof CommandErrorSchema>;
 
@@ -23,9 +25,7 @@ export function parseCommandError<T extends ZodSchema>(
   message: string,
 ): z.infer<typeof schema> | GenericError {
   const error = CommandErrorSchema.safeParse(e);
-  const parsedError = error.success
-    ? schema.safeParse(error.data.error)
-    : undefined;
+  const parsedError = error.success ? schema.safeParse(error.data) : undefined;
 
   if (!parsedError?.success) {
     console.error(message, e);

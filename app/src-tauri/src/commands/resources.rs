@@ -11,14 +11,10 @@ pub async fn __resources_get_root_resource(
     use get_root_resource::*;
     let resource_port = &state.resource_port;
 
-    Err(Errors::GenericError(CommandError::new(
-        "Failed to get root resource",
-    )))
-
-    // resource_port
-    //     .get_root_resource()
-    //     .map(RootResource::from)
-    //     .map_err(|_| Errors::ServerError(CommandError::new("Failed to get root resource")))
+    resource_port
+        .get_root_resource()
+        .map(RootResource::from)
+        .map_err(|_| Errors::GenericError(CommandError::new("Failed to get root resource")))
 }
 
 #[tauri::command]
