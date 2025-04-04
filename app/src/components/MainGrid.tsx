@@ -13,6 +13,7 @@ export default function MainGrid(): React.JSX.Element {
   const [resources, setResources] = useState<string[]>([]);
 
   useAsync(async () => {
+    console.log(await resourceService.getRootResource());
     setResources(await resourceService.getResources());
   }, [resourceService, setResources]);
 
