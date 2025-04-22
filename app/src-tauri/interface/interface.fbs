@@ -1,0 +1,46 @@
+namespace interface;
+
+enum Operation : int {
+  GET_ROOT_RESOURCE = 0
+}
+
+// Request structure
+table Request {
+  operation: Operation;
+  payload: [ubyte];
+}
+
+// =============================================
+// COMMON MODELS
+// =============================================
+
+table GenericError {
+  message: string;
+}
+
+// =============================================
+// RESOURCES
+// =============================================
+
+table ResourceBase {
+  id: string (required);
+  display_name: string (required);
+  description: string;
+}
+
+table RootResource {
+  base: ResourceBase (required);
+}
+
+table GetRootResourceResponse {
+  resource: RootResource;
+}
+
+// For error handling with oneof equivalent
+union GetRootResourceErrorUnion {
+  GenericError
+}
+
+table GetRootResourceError {
+  error_type: GetRootResourceErrorUnion;
+}

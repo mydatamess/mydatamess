@@ -4,20 +4,38 @@ import { RootResource } from "../../models/resources";
 import Result, { err, ok } from "../../models/results";
 import z from "zod";
 import { parseCommandError } from "../utils/tauri/error.utils";
+import {
+  GetRootResourceResponse,
+  Operation,
+  Request,
+  Response,
+} from "../../../generated/interface";
 
 export class TauriResourceService implements ResourceService {
   async getRootResource(): Promise<Result<RootResource, GetRootResourceError>> {
+    const request = Request.encode({
+      operation: Operation.GET_ROOT_RESOURCE,
+      payload: new Uint8Array(),
+    }).finish();
+    // eslint-disable-next-line no-useless-catch
     try {
-      const rootResource = await invoke("__resources_get_root_resource");
-      return ok(RootResourceSchema.parse(rootResource));
-    } catch (e) {
-      return err(
-        parseCommandError(
-          e,
-          GetRootResourceErrorSchema,
-          "Failed to get root resource",
-        ),
+      const response = await invoke<number[]>("main_cmd", {
+        request: Array.from(request),
+      });
+      const decodedResponse = Response.decode(new Uint8Array(response));
+      const rootResource = GetRootResourceResponse.decode(
+        decodedResponse.payload,
       );
+      return ok(rootResource);
+    } catch (e) {
+      throw e;
+      // return err(
+      //   parseCommandError(
+      //     e,
+      //     GetRootResourceErrorSchema,
+      //     "Failed to get root resource",
+      //   ),
+      // );
     }
   }
 
@@ -25,21 +43,3 @@ export class TauriResourceService implements ResourceService {
     return invoke("__resources_get_resources");
   }
 }
-
-const RootResourceSchema = z.object({
-  id: z.string(),
-  displayName: z.string(),
-  description: z
-    .string()
-    .nullish()
-    .transform((x) => x ?? undefined),
-});
-
-const GetRootResourceErrorSchema = z.discriminatedUnion("type", [
-  z.object({
-    type: z.literal("GenericError"),
-    error: z.object({
-      message: z.string(),
-    }),
-  }),
-]);

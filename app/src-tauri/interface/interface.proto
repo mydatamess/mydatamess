@@ -1,0 +1,48 @@
+syntax = "proto2";
+
+package interface;
+
+enum Operation {
+    /**
+     * Get root resource
+     */
+    GET_ROOT_RESOURCE = 0;
+}
+
+message Request {
+    required Operation operation = 1;
+    required bytes payload = 2;
+}
+
+// =================================================
+// COMMON MODELS
+// =================================================
+
+message GenericError {
+    optional string message = 1;
+}
+
+// =================================================
+// RESOURCES
+// =================================================
+
+message ResourceBase {
+    required string id = 1;
+    required string display_name = 2;
+    optional string description = 3;
+}
+
+message RootResource {
+    required ResourceBase base = 1;
+}
+
+message GetRootResourceResponse {
+    required RootResource resource = 1;
+}
+
+message GetRootResourceError {  
+    oneof error {
+        GenericError generic_error = 1;
+    }
+}
+

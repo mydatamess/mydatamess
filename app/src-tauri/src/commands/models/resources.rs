@@ -1,7 +1,8 @@
 use mydatamess_core::domain::models::resources::RootResource as CoreRootResource;
 use serde::Serialize;
+use ts_rs::TS;
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, TS)]
 #[serde(rename_all = "camelCase")]
 pub struct RootResource {
     pub id: String,

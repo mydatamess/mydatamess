@@ -1,6 +1,7 @@
 use serde::Serialize;
+use ts_rs::TS;
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, TS)]
 pub struct CommandError {
     pub message: String,
 }
