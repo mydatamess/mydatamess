@@ -1,0 +1,45 @@
+{
+  "name": "mydatamess-app",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "tauri": "tauri",
+    "generate": "./scripts/generate-cmd-types.sh src/generated/cmds"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@mui/icons-material": "^6.4.8",
+    "@mui/material": "^6.4.8",
+    "@tauri-apps/api": "^2",
+    "@tauri-apps/plugin-opener": "^2",
+    "i18next": "^24.2.3",
+    "i18next-http-backend": "^3.0.2",
+    "lodash": "^4.17.21",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-i18next": "^15.4.1",
+    "react-use": "^17.6.0",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.21.0",
+    "@tauri-apps/cli": "^2",
+    "@types/lodash": "^4.17.16",
+    "@types/node": "^22.14.1",
+    "@types/react": "^18.3.1",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.4",
+    "eslint": "^9.21.0",
+    "eslint-plugin-react": "^7.37.4",
+    "json-schema-to-typescript": "^15.0.4",
+    "prettier": "^3.5.3",
+    "typescript": "~5.6.2",
+    "typescript-eslint": "^8.25.0",
+    "vite": "^6.0.3"
+  }
+}
