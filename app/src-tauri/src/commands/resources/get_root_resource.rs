@@ -1,7 +1,7 @@
 use crate::{
     commands::{
         command::{Command, CommandSpec},
-        models::{errors::CommandError, resources::RootResource},
+        models::{errors::CommandError, resources::RootResourceDto},
     },
     state::AppState,
 };
@@ -19,7 +19,7 @@ pub struct GetRootResourceRequest {}
 
 #[derive(Serialize, JsonSchema)]
 pub struct GetRootResourceResponse {
-    resource: RootResource,
+    resource: RootResourceDto,
 }
 
 #[derive(Debug, Serialize, JsonSchema)]

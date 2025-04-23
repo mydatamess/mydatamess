@@ -1,17 +1,22 @@
 pub mod commands;
 pub mod state;
 
-pub mod generated;
-
 use commands::{
-    gateway::cmd_gateway, registry::CommandRegistry,
-    resources::get_root_resource::GetRootResourceCmd,
+    gateway::cmd_gateway,
+    registry::CommandRegistry,
+    resources::{
+        get_resource_groups::GetResourceGroupsCmd,
+        get_resources_for_group::GetResourcesForGroupCmd, get_root_resource::GetRootResourceCmd,
+    },
 };
 use mydatamess_core::application::services::resource_service::ResourceService;
 use state::AppState;
 
 pub fn build_cmd_registry() -> CommandRegistry {
-    CommandRegistry::new().add_cmd(GetRootResourceCmd)
+    CommandRegistry::new()
+        .add_cmd(GetRootResourceCmd)
+        .add_cmd(GetResourceGroupsCmd)
+        .add_cmd(GetResourcesForGroupCmd)
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
