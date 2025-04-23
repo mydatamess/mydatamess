@@ -1,28 +1,28 @@
 use crate::{
     commands::{
-        command::{Command, CommandTSModels},
+        command::{Command, CommandSpec},
         models::{errors::CommandError, resources::RootResource},
     },
     state::AppState,
 };
+use schemars::JsonSchema;
 use serde::Serialize;
 use serde_json::Value;
 use tauri::State;
-use ts_rs::TS;
 
 //
 // ─── TYPES ────────────────────────────────────────────────────────────────
 //
 
-#[derive(Serialize, TS)]
+#[derive(Serialize, JsonSchema)]
 pub struct GetRootResourceRequest {}
 
-#[derive(Serialize, TS)]
+#[derive(Serialize, JsonSchema)]
 pub struct GetRootResourceResponse {
     resource: RootResource,
 }
 
-#[derive(Debug, Serialize, TS)]
+#[derive(Debug, Serialize, JsonSchema)]
 #[serde(tag = "type", content = "error")]
 pub enum GetRootResourceErrors {
     GenericError(CommandError),
@@ -43,11 +43,12 @@ impl Command for GetRootResourceCmd {
         "__resources_get_root_resource".into()
     }
 
-    fn generate_ts_models(&self) -> CommandTSModels {
-        CommandTSModels {
-            request: GetRootResourceRequest::decl(),
-            response: GetRootResourceResponse::decl(),
-            error: GetRootResourceErrors::decl(),
+    fn command_spec(&self) -> CommandSpec {
+        CommandSpec {
+            operation_id: self.operation_id(),
+            request: schemars::schema_for!(GetRootResourceRequest),
+            response: schemars::schema_for!(GetRootResourceResponse),
+            error: schemars::schema_for!(GetRootResourceErrors),
         }
     }
 

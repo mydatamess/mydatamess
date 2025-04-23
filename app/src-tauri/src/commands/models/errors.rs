@@ -1,7 +1,8 @@
+use schemars::JsonSchema;
 use serde::Serialize;
 use ts_rs::TS;
 
-#[derive(Debug, Serialize, TS)]
+#[derive(Debug, Serialize, TS, JsonSchema)]
 pub struct CommandError {
     pub message: String,
 }

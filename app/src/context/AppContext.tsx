@@ -1,10 +1,9 @@
 import React, { createContext } from "react";
-import ResourceService from "../application/services/resources/ResourceService";
 import { TauriResourceService } from "../application/services/resources/TauriResourceService";
 
 export type AppContextType = {
   services: {
-    resourceService: ResourceService;
+    resourceService: TauriResourceService;
   };
 };
 

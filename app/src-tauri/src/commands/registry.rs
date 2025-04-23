@@ -24,11 +24,11 @@ impl CommandRegistry {
         self
     }
 
-    pub fn get(&self, operation_id: &str) -> Option<&Box<dyn Command>> {
-        self.commands.get(operation_id)
+    pub fn get(&self, operation_id: &str) -> Option<&dyn Command> {
+        self.commands.get(operation_id).map(|boxed| boxed.as_ref())
     }
 
-    pub fn get_commands(&self) -> impl Iterator<Item = &Box<dyn Command>> {
-        self.commands.values()
+    pub fn get_commands(&self) -> impl Iterator<Item = &dyn Command> {
+        self.commands.values().map(|boxed| boxed.as_ref())
     }
 }

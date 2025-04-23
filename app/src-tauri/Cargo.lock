@@ -2080,6 +2080,7 @@ dependencies = [
  "mydatamess-core",
  "prost",
  "prost-build",
+ "schemars",
  "serde",
  "serde_json",
  "tauri",
